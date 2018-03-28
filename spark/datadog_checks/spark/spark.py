@@ -591,7 +591,6 @@ class SparkCheck(AgentCheck):
         Set a metric
         '''
         if metric_type == INCREMENT:
-            print "{} {}".format(metric_name, value)
             self.increment(metric_name, value, tags=tags)
         else:
             self.log.error('Metric type "%s" unknown' % (metric_type))

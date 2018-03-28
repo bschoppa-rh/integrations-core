@@ -41,7 +41,7 @@ class AggregatorStub(object):
 
         candidates = []
         for metric in self._metrics.get(name, []):
-            if value is not None and value != metric.value:
+            if value is not None and metric.type != self.COUNTER and value != metric.value:
                 continue
 
             if tags and sorted(tags) != sorted(metric.tags):
@@ -54,6 +54,9 @@ class AggregatorStub(object):
                 continue
 
             candidates.append(metric)
+
+        if value is not None and all(m.type == self.COUNTER for m in candidates):
+            assert value == sum(map(lambda m : m.value, candidates))
 
         if count is not None:
             msg = "Needed exactly {} candidates for '{}', got {}".format(count, name, len(candidates))
