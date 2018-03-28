@@ -1,0 +1,15 @@
+version: '3.5'
+
+services:
+  apache:
+    image: "redis:${APACHE_VERSION}"
+    volumes:
+      - ${APACHE_CONFIG}:/usr/local/apache2/conf/httpd.conf
+    ports:
+      - "8180:8180"
+    networks:
+      - network1
+
+networks:
+  network1:
+    name: apache_network

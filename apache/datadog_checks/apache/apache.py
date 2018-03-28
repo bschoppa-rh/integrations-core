@@ -29,7 +29,7 @@ class Apache(AgentCheck):
         'ConnsTotal': 'apache.conns_total',
         'ConnsAsyncWriting': 'apache.conns_async_writing',
         'ConnsAsyncKeepAlive': 'apache.conns_async_keep_alive',
-        'ConnsAsyncClosing' : 'apache.conns_async_closing'
+        'ConnsAsyncClosing': 'apache.conns_async_closing'
     }
 
     RATES = {
@@ -85,7 +85,7 @@ class Apache(AgentCheck):
         # Loop through and extract the numerical values
         for line in response.splitlines():
             values = line.split(': ')
-            if len(values) == 2: # match
+            if len(values) == 2:  # match
                 metric, value = values
                 try:
                     value = float(value)
@@ -114,4 +114,7 @@ class Apache(AgentCheck):
                 self.warning("Assuming url was not correct. Trying to add ?auto suffix to the url")
                 self.check(instance)
             else:
-                raise Exception("No metrics were fetched for this instance. Make sure that %s is the proper url." % instance['apache_status_url'])
+                raise Exception((
+                    "No metrics were fetched for this instance. "
+                    "Make sure that %s is the proper url.")
+                     % instance['apache_status_url'])

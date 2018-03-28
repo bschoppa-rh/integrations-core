@@ -7,42 +7,24 @@ from os import path
 import json
 import re
 
-here = path.abspath(path.dirname(__file__))
+HERE = path.abspath(path.dirname(__file__))
 
-def parse_req_line(line):
-    line = line.strip()
-    if not line or line.startswith('--hash') or line[0] == '#':
-        return None
-    req = line.rpartition('#')
-    if len(req[1]) == 0:
-        line = req[2].strip()
-    else:
-        line = req[1].strip()
-
-    if '--hash=' in line:
-        line = line[:line.find('--hash=')].strip()
-    if ';' in line:
-        line = line[:line.find(';')].strip()
-    if '\\' in line:
-        line = line[:line.find('\\')].strip()
-
-    return line
 
 # Get the long description from the README file
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+
 # Parse requirements
-runtime_reqs = ['datadog-checks-base']
-with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
-    for line in f.readlines():
-        req = parse_req_line(line)
-        if req:
-            runtime_reqs.append(req)
+def get_requirements(fpath):
+    with open(path.join(HERE, fpath), encoding='utf-8') as f:
+        return f.readlines()
+
 
 def read(*parts):
-    with open(path.join(here, *parts), 'r') as fp:
+    with open(path.join(HERE, *parts), 'r') as fp:
         return fp.read()
+
 
 def find_version(*file_paths):
     version_file = read(*file_paths)
@@ -52,11 +34,12 @@ def find_version(*file_paths):
         return version_match.group(1)
     raise RuntimeError("Unable to find version string.")
 
+
 # https://packaging.python.org/guides/single-sourcing-package-version/
 version = find_version("datadog_checks", "apache", "__init__.py")
 
 manifest_version = None
-with open(path.join(here, 'manifest.json'), encoding='utf-8') as f:
+with open(path.join(HERE, 'manifest.json'), encoding='utf-8') as f:
     manifest = json.load(f)
     manifest_version = manifest.get('version')
 
@@ -95,7 +78,11 @@ setup(
     packages=['datadog_checks.apache'],
 
     # Run-time dependencies
-    install_requires=list(set(runtime_reqs)),
+    install_requires=get_requirements('requirements.in')+[
+        'datadog-checks-base',
+    ],
+    setup_requires=['pytest-runner', ],
+    tests_require=get_requirements('requirements-dev.txt'),
 
     # Development dependencies, run with:
     # $ pip install -e .[dev]
@@ -105,14 +92,6 @@ setup(
             'datadog_agent_tk>=5.15',
         ],
     },
-
-    # Testing setup and dependencies
-    tests_require=[
-        'nose',
-        'coverage',
-        'datadog_agent_tk>=5.15',
-    ],
-    test_suite='nose.collector',
 
     # Extra files to ship with the wheel package
     package_data={b'datadog_checks.apache': ['conf.yaml.example']},
