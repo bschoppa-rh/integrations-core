@@ -175,32 +175,34 @@ def mesos_requests_get_mock(*args, **kwargs):
         def raise_for_status(self):
             return True
 
-    if args[0] == MESOS_APP_URL:
+    arg_url = Url(args[0])
+
+    if arg_url == MESOS_APP_URL:
         with open(os.path.join(FIXTURE_DIR, 'mesos_apps'), 'r') as f:
             body = f.read()
             return MockMesosResponse(body, 200)
 
-    elif args[0] == MESOS_SPARK_APP_URL:
+    elif arg_url == MESOS_SPARK_APP_URL:
         with open(os.path.join(FIXTURE_DIR, 'spark_apps'), 'r') as f:
             body = f.read()
             return MockMesosResponse(body, 200)
 
-    elif args[0] == MESOS_SPARK_JOB_URL:
+    elif arg_url == MESOS_SPARK_JOB_URL:
         with open(os.path.join(FIXTURE_DIR, 'job_metrics'), 'r') as f:
             body = f.read()
             return MockMesosResponse(body, 200)
 
-    elif args[0] == MESOS_SPARK_STAGE_URL:
+    elif arg_url == MESOS_SPARK_STAGE_URL:
         with open(os.path.join(FIXTURE_DIR, 'stage_metrics'), 'r') as f:
             body = f.read()
             return MockMesosResponse(body, 200)
 
-    elif args[0] == MESOS_SPARK_EXECUTOR_URL:
+    elif arg_url == MESOS_SPARK_EXECUTOR_URL:
         with open(os.path.join(FIXTURE_DIR, 'executor_metrics'), 'r') as f:
             body = f.read()
             return MockMesosResponse(body, 200)
 
-    elif args[0] == MESOS_SPARK_RDD_URL:
+    elif arg_url == MESOS_SPARK_RDD_URL:
         with open(os.path.join(FIXTURE_DIR, 'rdd_metrics'), 'r') as f:
             body = f.read()
             return MockMesosResponse(body, 200)
@@ -221,37 +223,39 @@ def standalone_requests_get_mock(*args, **kwargs):
         def raise_for_status(self):
             return True
 
-    if args[0] == STANDALONE_APP_URL:
+    arg_url = Url(args[0])
+
+    if arg_url == STANDALONE_APP_URL:
         with open(os.path.join(FIXTURE_DIR, 'spark_standalone_apps'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_APP_HTML_URL:
+    elif arg_url == STANDALONE_APP_HTML_URL:
         with open(os.path.join(FIXTURE_DIR, 'spark_standalone_app'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_SPARK_APP_URL:
+    elif arg_url == STANDALONE_SPARK_APP_URL:
         with open(os.path.join(FIXTURE_DIR, 'spark_apps'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_SPARK_JOB_URL:
+    elif arg_url == STANDALONE_SPARK_JOB_URL:
         with open(os.path.join(FIXTURE_DIR, 'job_metrics'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_SPARK_STAGE_URL:
+    elif arg_url == STANDALONE_SPARK_STAGE_URL:
         with open(os.path.join(FIXTURE_DIR, 'stage_metrics'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_SPARK_EXECUTOR_URL:
+    elif arg_url == STANDALONE_SPARK_EXECUTOR_URL:
         with open(os.path.join(FIXTURE_DIR, 'executor_metrics'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_SPARK_RDD_URL:
+    elif arg_url == STANDALONE_SPARK_RDD_URL:
         with open(os.path.join(FIXTURE_DIR, 'rdd_metrics'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
@@ -272,49 +276,51 @@ def standalone_requests_pre20_get_mock(*args, **kwargs):
         def raise_for_status(self):
             return True
 
-    if args[0] == STANDALONE_APP_URL:
+    arg_url = Url(args[0])
+
+    if arg_url == STANDALONE_APP_URL:
         with open(os.path.join(FIXTURE_DIR, 'spark_standalone_apps'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_APP_HTML_URL:
+    elif arg_url == STANDALONE_APP_HTML_URL:
         with open(os.path.join(FIXTURE_DIR, 'spark_standalone_app'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_SPARK_APP_URL:
+    elif arg_url == STANDALONE_SPARK_APP_URL:
         with open(os.path.join(FIXTURE_DIR, 'spark_apps_pre20'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_SPARK_JOB_URL:
+    elif arg_url == STANDALONE_SPARK_JOB_URL:
         return MockStandaloneResponse("{}", 404)
 
-    elif args[0] == STANDALONE_SPARK_STAGE_URL:
+    elif arg_url == STANDALONE_SPARK_STAGE_URL:
         return MockStandaloneResponse("{}", 404)
 
-    elif args[0] == STANDALONE_SPARK_EXECUTOR_URL:
+    elif arg_url == STANDALONE_SPARK_EXECUTOR_URL:
         return MockStandaloneResponse("{}", 404)
 
-    elif args[0] == STANDALONE_SPARK_RDD_URL:
+    elif arg_url == STANDALONE_SPARK_RDD_URL:
         return MockStandaloneResponse("{}", 404)
 
-    elif args[0] == STANDALONE_SPARK_JOB_URL_PRE20:
+    elif arg_url == STANDALONE_SPARK_JOB_URL_PRE20:
         with open(os.path.join(FIXTURE_DIR, 'job_metrics'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_SPARK_STAGE_URL_PRE20:
+    elif arg_url == STANDALONE_SPARK_STAGE_URL_PRE20:
         with open(os.path.join(FIXTURE_DIR, 'stage_metrics'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_SPARK_EXECUTOR_URL_PRE20:
+    elif arg_url == STANDALONE_SPARK_EXECUTOR_URL_PRE20:
         with open(os.path.join(FIXTURE_DIR, 'executor_metrics'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
 
-    elif args[0] == STANDALONE_SPARK_RDD_URL_PRE20:
+    elif arg_url == STANDALONE_SPARK_RDD_URL_PRE20:
         with open(os.path.join(FIXTURE_DIR, 'rdd_metrics'), 'r') as f:
             body = f.read()
             return MockStandaloneResponse(body, 200)
@@ -504,7 +510,7 @@ SPARK_METRIC_TAGS = [
 ]
 
 def test_yarn(aggregator):
-    with mock.patch('requests.get', yarn_requests_get_mock) as yarn_get:
+    with mock.patch('requests.get', yarn_requests_get_mock):
         c = SparkCheck('spark', None, {}, [YARN_CONFIG])
         c.check(YARN_CONFIG)
 
@@ -555,139 +561,133 @@ def test_yarn(aggregator):
         #assertServiceCheckOK(SPARK_SERVICE_CHECK,
         #    tags=['url:http://localhost:8088'])
 
+def test_mesos(aggregator):
+    with mock.patch('requests.get', mesos_requests_get_mock):
+        c = SparkCheck('spark', None, {}, [MESOS_CONFIG])
+        c.check(MESOS_CONFIG)
 
-@mock.patch('requests.get', side_effect=mesos_requests_get_mock)
-def test_mesos():
-    config = {
-        'instances': [MESOS_CONFIG]
-    }
+        # Check the running job metrics
+        for metric, value in SPARK_JOB_RUNNING_METRIC_VALUES.iteritems():
+            aggregator.assert_metric(metric,
+                value=value,
+                tags=SPARK_JOB_RUNNING_METRIC_TAGS)
 
-    run_check(config)
+        # Check the succeeded job metrics
+        for metric, value in SPARK_JOB_SUCCEEDED_METRIC_VALUES.iteritems():
+            aggregator.assert_metric(metric,
+                value=value,
+                tags=SPARK_JOB_SUCCEEDED_METRIC_TAGS)
 
-    # Check the running job metrics
-    for metric, value in SPARK_JOB_RUNNING_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_JOB_RUNNING_METRIC_TAGS)
+        # Check the running stage metrics
+        for metric, value in SPARK_STAGE_RUNNING_METRIC_VALUES.iteritems():
+            aggregator.assert_metric(metric,
+                value=value,
+                tags=SPARK_STAGE_RUNNING_METRIC_TAGS)
 
-    # Check the succeeded job metrics
-    for metric, value in self.SPARK_JOB_SUCCEEDED_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_JOB_SUCCEEDED_METRIC_TAGS)
+        # Check the complete stage metrics
+        for metric, value in SPARK_STAGE_COMPLETE_METRIC_VALUES.iteritems():
+            aggregator.assert_metric(metric,
+                value=value,
+                tags=SPARK_STAGE_COMPLETE_METRIC_TAGS)
 
-    # Check the running stage metrics
-    for metric, value in self.SPARK_STAGE_RUNNING_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_STAGE_RUNNING_METRIC_TAGS)
+        # Check the driver metrics
+        for metric, value in SPARK_DRIVER_METRIC_VALUES.iteritems():
+            aggregator.assert_metric(metric,
+                value=value,
+                tags=SPARK_METRIC_TAGS)
 
-    # Check the complete stage metrics
-    for metric, value in self.SPARK_STAGE_COMPLETE_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_STAGE_COMPLETE_METRIC_TAGS)
+        # Check the executor metrics
+        for metric, value in SPARK_EXECUTOR_METRIC_VALUES.iteritems():
+            aggregator.assert_metric(metric,
+                value=value,
+                tags=SPARK_METRIC_TAGS)
 
-    # Check the driver metrics
-    for metric, value in self.SPARK_DRIVER_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_METRIC_TAGS)
+        # Check the RDD metrics
+        for metric, value in SPARK_RDD_METRIC_VALUES.iteritems():
+            aggregator.assert_metric(metric,
+                value=value,
+                tags=SPARK_METRIC_TAGS)
 
-    # Check the executor metrics
-    for metric, value in self.SPARK_EXECUTOR_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_METRIC_TAGS)
+        # Check the service tests
 
-    # Check the RDD metrics
-    for metric, value in self.SPARK_RDD_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_METRIC_TAGS)
+        # self.assertServiceCheckOK(MESOS_SERVICE_CHECK,
+        #     tags=['url:http://localhost:5050'])
+        # self.assertServiceCheckOK(SPARK_SERVICE_CHECK,
+        #     tags=['url:http://localhost:4040'])
 
-    # Check the service tests
-    self.assertServiceCheckOK(MESOS_SERVICE_CHECK,
-        tags=['url:http://localhost:5050'])
-    self.assertServiceCheckOK(SPARK_SERVICE_CHECK,
-        tags=['url:http://localhost:4040'])
-
-    self.coverage_report()
+        assert aggregator.metrics_asserted_pct == 100.0
 
 
-@mock.patch('requests.get', side_effect=mesos_requests_get_mock)
 def test_mesos_filter(mock_requests):
-    config = {
-        'instances': [self.MESOS_FILTERED_CONFIG]
-    }
+    with mock.patch('requests.get', mesos_requests_get_mock):
+        c = SparkCheck('spark', None, {}, [MESOS_FILTERED_CONFIG])
+        c.check(MESOS_CONFIG)
 
-    self.run_check(config)
-    self.assertServiceCheckOK(MESOS_SERVICE_CHECK,
-        tags=['url:http://localhost:5050'])
+        # self.assertServiceCheckOK(MESOS_SERVICE_CHECK,
+        #     tags=['url:http://localhost:5050'])
 
-    self.coverage_report()
+        # assert aggregator.metrics_asserted_pct == 100.0
+
 
 @mock.patch('requests.get', side_effect=standalone_requests_get_mock)
 def test_standalone(mock_requests):
-    config = {
-        'instances': [self.STANDALONE_CONFIG]
-    }
+   with mock.patch('requests.get', mesos_requests_get_mock):
+        c = SparkCheck('spark', None, {}, [MESOS_CONFIG])
+        c.check(MESOS_CONFIG)
 
-    self.run_check(config)
+        # Check the running job metrics
+        for metric, value in self.SPARK_JOB_RUNNING_METRIC_VALUES.iteritems():
+            self.assertMetric(metric,
+                value=value,
+                tags=self.SPARK_JOB_RUNNING_METRIC_TAGS)
 
-    # Check the running job metrics
-    for metric, value in self.SPARK_JOB_RUNNING_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_JOB_RUNNING_METRIC_TAGS)
+        # Check the running job metrics
+        for metric, value in self.SPARK_JOB_RUNNING_METRIC_VALUES.iteritems():
+            self.assertMetric(metric,
+                value=value,
+                tags=self.SPARK_JOB_RUNNING_METRIC_TAGS)
 
-    # Check the running job metrics
-    for metric, value in self.SPARK_JOB_RUNNING_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_JOB_RUNNING_METRIC_TAGS)
+        # Check the succeeded job metrics
+        for metric, value in self.SPARK_JOB_SUCCEEDED_METRIC_VALUES.iteritems():
+            self.assertMetric(metric,
+                value=value,
+                tags=self.SPARK_JOB_SUCCEEDED_METRIC_TAGS)
 
-    # Check the succeeded job metrics
-    for metric, value in self.SPARK_JOB_SUCCEEDED_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_JOB_SUCCEEDED_METRIC_TAGS)
+        # Check the running stage metrics
+        for metric, value in self.SPARK_STAGE_RUNNING_METRIC_VALUES.iteritems():
+            self.assertMetric(metric,
+                value=value,
+                tags=self.SPARK_STAGE_RUNNING_METRIC_TAGS)
 
-    # Check the running stage metrics
-    for metric, value in self.SPARK_STAGE_RUNNING_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_STAGE_RUNNING_METRIC_TAGS)
+        # Check the complete stage metrics
+        for metric, value in self.SPARK_STAGE_COMPLETE_METRIC_VALUES.iteritems():
+            self.assertMetric(metric,
+                value=value,
+                tags=self.SPARK_STAGE_COMPLETE_METRIC_TAGS)
 
-    # Check the complete stage metrics
-    for metric, value in self.SPARK_STAGE_COMPLETE_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_STAGE_COMPLETE_METRIC_TAGS)
+        # Check the driver metrics
+        for metric, value in self.SPARK_DRIVER_METRIC_VALUES.iteritems():
+            self.assertMetric(metric,
+                value=value,
+                tags=self.SPARK_METRIC_TAGS)
 
-    # Check the driver metrics
-    for metric, value in self.SPARK_DRIVER_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_METRIC_TAGS)
+        # Check the executor metrics
+        for metric, value in self.SPARK_EXECUTOR_METRIC_VALUES.iteritems():
+            self.assertMetric(metric,
+                value=value,
+                tags=self.SPARK_METRIC_TAGS)
 
-    # Check the executor metrics
-    for metric, value in self.SPARK_EXECUTOR_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_METRIC_TAGS)
+        # Check the RDD metrics
+        for metric, value in self.SPARK_RDD_METRIC_VALUES.iteritems():
+            self.assertMetric(metric,
+                value=value,
+                tags=self.SPARK_METRIC_TAGS)
 
-    # Check the RDD metrics
-    for metric, value in self.SPARK_RDD_METRIC_VALUES.iteritems():
-        self.assertMetric(metric,
-            value=value,
-            tags=self.SPARK_METRIC_TAGS)
-
-    # Check the service tests
-    self.assertServiceCheckOK(STANDALONE_SERVICE_CHECK,
-        tags=['url:http://localhost:8080'])
-    self.assertServiceCheckOK(SPARK_SERVICE_CHECK,
-        tags=['url:http://localhost:4040'])
+        # Check the service tests
+        self.assertServiceCheckOK(STANDALONE_SERVICE_CHECK,
+            tags=['url:http://localhost:8080'])
+        self.assertServiceCheckOK(SPARK_SERVICE_CHECK,
+            tags=['url:http://localhost:4040'])
 
 @mock.patch('requests.get', side_effect=standalone_requests_pre20_get_mock)
 def test_standalone_pre20(mock_requests):
