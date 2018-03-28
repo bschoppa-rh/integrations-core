@@ -3,6 +3,8 @@
 # Licensed under Simplified BSD License (see LICENSE)
 
 import pytest
+import os
+import subprocess
 
 from datadog_checks.apache import Apache
 
@@ -41,6 +43,22 @@ APACHE_RATES = [
     'apache.net.bytes_per_s',
     'apache.net.request_per_s'
 ]
+
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+@pytest.fixture(scope="session")
+def spin_up_apache():
+    env = os.environ
+    env['APACHE_CONFIG'] = os.path.join(HERE, 'config', 'httpd.conf')
+    args = [
+        "docker-compose",
+        "-f", os.path.join(HERE, 'compose', 'standalone.compose')
+    ]
+    subprocess.check_call(args + ["up", "-d"], env=env)
+    yield
+    subprocess.check_call(args + ["down"], env=env)
 
 
 @pytest.fixture
