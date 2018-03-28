@@ -5,7 +5,6 @@ from codecs import open
 from os import path
 
 import json
-import re
 
 HERE = path.abspath(path.dirname(__file__))
 

@@ -5,6 +5,7 @@
 import pytest
 import os
 import subprocess
+import requests
 
 from datadog_checks.apache import Apache
 
@@ -20,11 +21,9 @@ CONFIG_STUBS = [
         'tags': ['instance:second']
     },
 ]
-BAD_CONFIG = [
-    {
+BAD_CONFIG = {
         'apache_status_url': 'http://localhost:1234/server-status',
-    }
-]
+}
 
 APACHE_GAUGES = [
     'apache.performance.idle_workers',
@@ -54,11 +53,14 @@ def spin_up_apache():
     env['APACHE_CONFIG'] = os.path.join(HERE, 'config', 'httpd.conf')
     args = [
         "docker-compose",
-        "-f", os.path.join(HERE, 'compose', 'standalone.compose')
+        "-f", os.path.join(HERE, 'compose', 'apache.yaml')
     ]
-    subprocess.check_call(args + ["up", "-d"], env=env)
-    yield
     subprocess.check_call(args + ["down"], env=env)
+    subprocess.check_call(args + ["up", "-d"], env=env)
+    for _ in xrange(0, 100):
+        requests.get('http://localhost:8180')
+    yield
+    # subprocess.check_call(args + ["down"], env=env)
 
 
 @pytest.fixture
@@ -70,7 +72,6 @@ def aggregator():
 
 def test_check(aggregator, spin_up_apache):
     apache_check = Apache('redisdb', {}, {})
-
     for config in CONFIG_STUBS:
         # run twice to pick up rates
         apache_check.check(config)
@@ -78,46 +79,24 @@ def test_check(aggregator, spin_up_apache):
 
         tags = config['tags']
         for mname in APACHE_GAUGES + APACHE_RATES:
-            aggregator.assert_metric(mname, tags=tags, count=1)
+            aggregator.assert_metric(mname, tags=tags, count=2)
         assert aggregator.service_checks('apache.can_connect')[0].status == Apache.OK
 
+        print aggregator.service_checks('apache.can_connect')
+
         sc_tags = ['host:localhost', 'port:8180'] + tags
-        for tag in aggregator.service_checks('apache.can_connect')[0].tags:
-            assert tag in sc_tags
+        for sc in aggregator.service_checks('apache.can_connect'):
+            for tag in sc.tags:
+                assert tag in sc_tags
+
+        assert aggregator.metrics_asserted_pct == 100.0
+        aggregator.reset()
 
 
-# def test_check(self):
-#     config = {
-#         'instances': self.CONFIG_STUBS
-#     }
-#
-#     self.run_check_twice(config)
-#
-#     # Assert metrics
-#     for stub in self.CONFIG_STUBS:
-#         expected_tags = stub['tags']
-#
-#         for mname in self.APACHE_GAUGES + self.APACHE_RATES:
-#             self.assertMetric(mname, tags=expected_tags, count=1)
-#
-#         # Assert service checks
-#         self.assertServiceCheck('apache.can_connect', status=AgentCheck.OK,
-#                             tags=['host:localhost', 'port:8180'] + expected_tags, count=1)
-#
-#     self.coverage_report()
-#
-#
-# def test_connection_failure(self):
-#     config = {
-#         'instances': self.BAD_CONFIG
-#     }
-#
-#     # Assert service check
-#     self.assertRaises(
-#         Exception,
-#         lambda: self.run_check(config)
-#     )
-#     self.assertServiceCheck('apache.can_connect', status=AgentCheck.CRITICAL,
-#                             tags=['host:localhost', 'port:1234'], count=1)
-#
-#     self.coverage_report()
+def test_connection_failure(aggregator, spin_up_apache):
+    apache_check = Apache('redisdb', {}, {})
+    with pytest.raises(Exception):
+        apache_check.check(BAD_CONFIG)
+
+    assert aggregator.service_checks('apache.can_connect')[0].status == Apache.CRITICAL
+    assert len(aggregator._metrics) == 0

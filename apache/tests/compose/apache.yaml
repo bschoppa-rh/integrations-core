@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   apache:
-    image: "redis:${APACHE_VERSION}"
+    image: "httpd:${APACHE_VERSION}"
     volumes:
       - ${APACHE_CONFIG}:/usr/local/apache2/conf/httpd.conf
     ports:
