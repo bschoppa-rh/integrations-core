@@ -84,8 +84,8 @@ from simplejson import JSONDecodeError
 from bs4 import BeautifulSoup
 
 # Project
-from checks import AgentCheck
-from config import _is_affirmative
+from datadog_checks.checks import AgentCheck
+from datadog_checks.config import _is_affirmative
 
 # Identifier for cluster master address in `spark.yaml`
 MASTER_ADDRESS = 'spark_url'
@@ -591,6 +591,7 @@ class SparkCheck(AgentCheck):
         Set a metric
         '''
         if metric_type == INCREMENT:
+            print "{} {}".format(metric_name, value)
             self.increment(metric_name, value, tags=tags)
         else:
             self.log.error('Metric type "%s" unknown' % (metric_type))
